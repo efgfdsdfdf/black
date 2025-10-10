@@ -1,13 +1,21 @@
-# Ignore server env files
-first code/server/.env
-
 # Node modules
-**/node_modules
+node_modules/
 
-# OS files
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# Build output
+dist/
+build/
+
+# OS & editor files
 .DS_Store
 Thumbs.db
-
-# Editor files
 .vscode/
-*.log
+
+
