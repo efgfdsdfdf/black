@@ -1,46 +1,140 @@
+# accepts
 
-Black PWA + Server README
-=========================
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![Node.js Version][node-version-image]][node-version-url]
+[![Build Status][github-actions-ci-image]][github-actions-ci-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
 
-Server (Node) setup (example)
------------------------------
-1. Install dependencies:
-   npm install
+Higher level content negotiation based on [negotiator](https://www.npmjs.com/package/negotiator).
+Extracted from [koa](https://www.npmjs.com/package/koa) for general use.
 
-2. Generate VAPID keys (for Web Push):
-   npx web-push generate-vapid-keys
-   (or use a small node script to generate them)
+In addition to negotiator, it allows:
 
-   This prints a public/private pair. Set them in your environment:
-   export VAPID_PUBLIC="YOUR_PUBLIC_KEY"
-   export VAPID_PRIVATE="YOUR_PRIVATE_KEY"
-   # Create a .env file in this folder with:
-   # OPENAI_API_KEY=sk-...
-   # PORT=5000
+- Allows types as an array or arguments list, ie `(['text/html', 'application/json'])`
+  as well as `('text/html', 'application/json')`.
+- Allows type shorthands such as `json`.
+- Returns `false` when no types match
+- Treats non-existent headers as `*`
 
-3. Start server:
-   npm start
-   (the server will run on the port defined in .env or 3000 by default)
+## Installation
 
-Health & test endpoints
-- GET /health  -> returns {ok:true}
-- POST /chat  -> accepts { message: '...' } and returns { reply: '...' }
+This is a [Node.js](https://nodejs.org/en/) module available through the
+[npm registry](https://www.npmjs.com/). Installation is done using the
+[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
-Example test (PowerShell):
-  curl http://localhost:5000/health
-  curl -Method POST http://localhost:5000/chat -Body (ConvertTo-Json @{message='Hello'}) -ContentType 'application/json'
+```sh
+$ npm install accepts
+```
 
-Endpoints:
-- POST /api/chat  { message: "..." }  -> proxies to OpenAI using server OPENAI_API_KEY (response is raw OpenAI JSON)
-- POST /subscribe { subscription: {...} } -> saves subscription for demo
-- POST /push      { title, message } -> sends push to saved subscriptions (requires VAPID keys)
+## API
 
-Security note: Do NOT put your OpenAI key in client-side code for production. Use server-side proxy.
+```js
+var accepts = require('accepts')
+```
 
-Stop tracking .env in Git (recommended)
-- From repository root:
-   git rm --cached "first code/server/.env"
-   git commit -m "stop tracking server .env"
+### accepts(req)
 
-If the key was committed and pushed, consider using BFG or git-filter-repo to remove it from history and then rotate the key.
+Create a new `Accepts` object for the given `req`.
 
+#### .charset(charsets)
+
+Return the first accepted charset. If nothing in `charsets` is accepted,
+then `false` is returned.
+
+#### .charsets()
+
+Return the charsets that the request accepts, in the order of the client's
+preference (most preferred first).
+
+#### .encoding(encodings)
+
+Return the first accepted encoding. If nothing in `encodings` is accepted,
+then `false` is returned.
+
+#### .encodings()
+
+Return the encodings that the request accepts, in the order of the client's
+preference (most preferred first).
+
+#### .language(languages)
+
+Return the first accepted language. If nothing in `languages` is accepted,
+then `false` is returned.
+
+#### .languages()
+
+Return the languages that the request accepts, in the order of the client's
+preference (most preferred first).
+
+#### .type(types)
+
+Return the first accepted type (and it is returned as the same text as what
+appears in the `types` array). If nothing in `types` is accepted, then `false`
+is returned.
+
+The `types` array can contain full MIME types or file extensions. Any value
+that is not a full MIME types is passed to `require('mime-types').lookup`.
+
+#### .types()
+
+Return the types that the request accepts, in the order of the client's
+preference (most preferred first).
+
+## Examples
+
+### Simple type negotiation
+
+This simple example shows how to use `accepts` to return a different typed
+respond body based on what the client wants to accept. The server lists it's
+preferences in order and will get back the best match between the client and
+server.
+
+```js
+var accepts = require('accepts')
+var http = require('http')
+
+function app (req, res) {
+  var accept = accepts(req)
+
+  // the order of this list is significant; should be server preferred order
+  switch (accept.type(['json', 'html'])) {
+    case 'json':
+      res.setHeader('Content-Type', 'application/json')
+      res.write('{"hello":"world!"}')
+      break
+    case 'html':
+      res.setHeader('Content-Type', 'text/html')
+      res.write('<b>hello, world!</b>')
+      break
+    default:
+      // the fallback is text/plain, so no need to specify it above
+      res.setHeader('Content-Type', 'text/plain')
+      res.write('hello, world!')
+      break
+  }
+
+  res.end()
+}
+
+http.createServer(app).listen(3000)
+```
+
+You can test this out with the cURL program:
+```sh
+curl -I -H'Accept: text/html' http://localhost:3000/
+```
+
+## License
+
+[MIT](LICENSE)
+
+[coveralls-image]: https://badgen.net/coveralls/c/github/jshttp/accepts/master
+[coveralls-url]: https://coveralls.io/r/jshttp/accepts?branch=master
+[github-actions-ci-image]: https://badgen.net/github/checks/jshttp/accepts/master?label=ci
+[github-actions-ci-url]: https://github.com/jshttp/accepts/actions/workflows/ci.yml
+[node-version-image]: https://badgen.net/npm/node/accepts
+[node-version-url]: https://nodejs.org/en/download
+[npm-downloads-image]: https://badgen.net/npm/dm/accepts
+[npm-url]: https://npmjs.org/package/accepts
+[npm-version-image]: https://badgen.net/npm/v/accepts
