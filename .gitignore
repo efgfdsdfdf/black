@@ -1,0 +1,13 @@
+# Ignore server env files
+first code/server/.env
+
+# Node modules
+**/node_modules
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.log
