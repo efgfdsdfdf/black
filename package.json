@@ -1,16 +1,20 @@
 {
-  "name": "black-proxy-server",
+  "name": "student-companion",
   "version": "1.0.0",
-  "description": "Example server: OpenAI proxy + Web Push helper for Black PWA (for demo only)",
-  "main": "server.js",
+  "description": "Web app for students to manage notes, timetable, GPA, and AI chatbot.",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "body-parser": "^1.20.2",
-    "node-fetch": "^2.6.7",
-    "web-push": "^3.5.0",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }
