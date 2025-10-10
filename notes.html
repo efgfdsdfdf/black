@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes | Student Companion</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="stylesheet" href="../assets/css/black_theme.css">
+  <link rel="manifest" href="../assets/pwa/manifest.json">
+  <meta name="theme-color" content="#7b61ff">
+</head>
+
+<body>
+ 
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">📘 Student Companion</div>
+    <div class="nav-right">
+      <a href="homepage.html">Home</a>
+      <a href="notes.html" class="active">Notes</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="gpa.html">GPA</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Notes Section -->
+  <main class="container fade-in" style="max-width: 800px; margin: 40px auto; text-align: center;">
+    <h1>📝 MY Notes</h1>
+    <p class="subtitle">Write, edit, and manage your notes below.</p>
+
+    <!-- Note Input -->
+    <textarea id="noteInput" placeholder="Write your note here..." 
+      style="width: 90%; height: 150px; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical;"></textarea>
+    <br>
+    <button id="saveNoteBtn" style="margin-top: 10px; padding: 10px 20px; border-radius: 6px; border: none; background-color: #7b61ff; color: white; cursor: pointer;">
+      Save Note
+    </button>
+
+    <!-- Notes List -->
+    <div id="notesContainer" style="margin-top: 30px; text-align: left;">
+      <ul id="notesList" style="list-style: none; padding: 0;"></ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Student Companion | Team Black 🖤</p>
+    <p>Powered by Ezeilo</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="../assets/js/blackbot.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/push.js" defer></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("../assets/pwa/sw.js").catch(e => console.warn("sw reg failed", e));
+    }
+
+    // Greet logged-in user
+    const currentUser = localStorage.getItem("currentUser");
+    const greetEl = document.querySelector(".user-greet");
+    greetEl.textContent = currentUser ? `Hi, ${currentUser} 👋` : "Hi, Guest 👋";
+  </script>
+
+  <script>
+    // Render saved notes with separating lines
+    const notesList = document.getElementById("notesList");
+    const notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+    if (notes.length === 0) {
+      notesList.innerHTML = "<p>No notes saved yet.</p>";
+    } else {
+      notes.forEach((note, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<div style="padding: 10px 0;">${note}</div>`;
+        if (index < notes.length - 1) li.innerHTML += `<hr style="border: 0; height: 1px; background: #ddd;">`;
+        notesList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

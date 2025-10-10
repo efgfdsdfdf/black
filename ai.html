@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black AI | Student Companion</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="../assets/css/black_theme.css">
+
+  <meta name="theme-color" content="#0ff">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">📘 Student Companion</div>
+    <div class="nav-right">
+      <a href="homepage.html">Home</a>
+      <a href="notes.html">Notes</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="gpa.html">GPA</a>
+      <a href="ai.html" class="active">Black</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Chat Section -->
+  <section class="chat-section">
+    <div class="chat-container">
+      <h2>Black AI Assistant</h2>
+      <div class="chat-meta">User: <span id="username-display">Guest</span></div>
+      <div class="chat-controls" style="margin:6px 0;">
+        <button id="clearHistoryBtn" style="margin-right:8px">Clear History</button>
+        <button id="exportHistoryBtn">Export History</button>
+      </div>
+      <div class="chat-box"></div>
+      <div class="input-container">
+        <input type="text" placeholder="Type a message..." />
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Black Companion | Designed by David</p>
+  </footer>
+
+  <!-- JS Scripts -->
+  <script src="../assets/js/blackbot.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/push.js" defer></script>
+</body>
+</html>
+
