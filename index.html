@@ -138,13 +138,8 @@
 
     .slider-container {
       position: relative;
-      width: 80%;
-      background: var(--surface-dark);
-      border-radius: 20px;
-      border: 1px solid var(--glass-border);
-      padding: 10px;
+      width: 100%;
       overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     }
 
     .slider-track {
@@ -156,9 +151,7 @@
     .slide {
       min-width: 100%;
       position: relative;
-      border-radius: 12px;
       overflow: hidden;
-      background: #1a1a24;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -167,7 +160,7 @@
     .slide img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
 
     .slide-caption {
@@ -178,12 +171,40 @@
       background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
       padding: 2rem 1rem 1rem 1rem;
       text-align: left;
+      pointer-events: none;
     }
 
     .slide-caption h3 {
       color: #fff;
       font-size: 1.4rem;
       font-weight: 700;
+    }
+
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s;
+    }
+    .slider-arrow:hover {
+      background: var(--cyber-purple);
+    }
+    .prev-arrow {
+      left: 10px;
+    }
+    .next-arrow {
+      right: 10px;
     }
 
     .slider-nav {
@@ -355,11 +376,13 @@
     <div class="showcase-slider-wrapper">
       <div class="slider-title">Explore The Interface</div>
       <div class="slider-container">
+        <button class="slider-arrow prev-arrow" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="slider-arrow next-arrow" onclick="nextSlideManual()"><i class="fas fa-chevron-right"></i></button>
         <div class="slider-track" id="sliderTrack">
           
-                <!-- Slide 4 -->
+                <!-- Slide 1 -->
           <div class="slide">
-            <!-- Replace with actual profile screenshot -->
+           
             <div class="mockup-placeholder-text"></div>
             <img src="Student Companion AI - Google Chrome 20_05_2026 13_40_17.png" onerror="this.style.opacity='0'">
             <div class="slide-caption">
@@ -367,7 +390,7 @@
             </div>
           </div>
 
-          <!-- Slide 1 -->
+          <!-- Slide 2 -->
           <div class="slide">
             <!-- Replace with actual dashboard screenshot -->
             <div class="mockup-placeholder-text"></div>
@@ -377,7 +400,7 @@
             </div>
           </div>
 
-          <!-- Slide 2 -->
+          <!-- Slide 3 -->
           <div class="slide">
             <!-- Replace with actual profile screenshot -->
             <div class="mockup-placeholder-text"></div>
@@ -387,7 +410,7 @@
             </div>
           </div>
 
-          <!-- Slide 3 -->
+          <!-- Slide 4 -->
           <div class="slide">
             <!-- Replace with actual settings/tools screenshot -->
             <div class="mockup-placeholder-text">[ Study Tools Image ]</div>
@@ -455,11 +478,6 @@
         <h2>GPA Analytics</h2>
       </div>
 
-      <div class="mockup-container">
-        <div class="mockup-placeholder-text">
-          <i class="fas fa-image" style="display:block; font-size: 1.5rem; margin-bottom: 5px;"></i>
-          [ GPA Tracker Screenshot ]
-        </div>
         <img src="Student Companion AI - Google Chrome 20_05_2026 13_48_07.png" class="mockup-image" onerror="this.style.opacity='0'">
       </div>
 
@@ -601,6 +619,22 @@
       goToSlide(currentIndex);
     }
 
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      goToSlide(currentIndex);
+      resetTimer();
+    }
+
+    function nextSlideManual() {
+      nextSlide();
+      resetTimer();
+    }
+
+    function resetTimer() {
+      clearInterval(slideInterval);
+      startSlider();
+    }
+
     function startSlider() {
       slideInterval = setInterval(nextSlide, 5000); // 5 seconds
     }
@@ -608,9 +642,8 @@
     // Add click events to dots
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => {
-        clearInterval(slideInterval);
         goToSlide(index);
-        startSlider(); // restart timer
+        resetTimer();
       });
     });
 
